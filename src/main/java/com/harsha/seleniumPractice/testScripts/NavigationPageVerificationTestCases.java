@@ -1,4 +1,4 @@
-package com.harsha.seleniumPractice.webDriver.testScripts;
+package com.harsha.seleniumPractice.testScripts;
 
 
 

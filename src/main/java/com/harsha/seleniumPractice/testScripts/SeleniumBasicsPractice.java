@@ -1,4 +1,4 @@
-package com.harsha.seleniumPractice.basics.day1;
+package com.harsha.seleniumPractice.testScripts;
 
 import java.io.File;
 
