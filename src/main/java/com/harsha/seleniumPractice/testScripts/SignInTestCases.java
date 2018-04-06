@@ -11,21 +11,20 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
+import com.harsha.seleniumPractice.libraries.GenericMethods;
+import com.harsha.seleniumPractice.libraries.Utilities;
+
 public class SignInTestCases {
 	
+	WebDriver driver;
 	String applicationUrl = "http://automationpractice.com/index.php";
+	Utilities utilities = new Utilities();
+	
 	
 	@Test
 	public void seleniumWebDriverCommands() {
 		
-		
-		WebDriver driver = new FirefoxDriver(); //To launch the Firefox browser
-		System.out.println("PASS -- Launched Firefox browser successfully");
-		
-		driver.get(applicationUrl);   //Opens the application URL specified
-		System.out.println("Application URL: "+driver.getCurrentUrl());  //To get current url
-		System.out.println("Window Title :"+driver.getTitle()); //To get the window title
-		
+		driver = utilities.launchBrowser("Firefox"); //This will launch the browser and application
 		WebElement signInLink = driver.findElement(By.xpath("//a[@class='login']")); //Stores sign in link
 		signInLink.click();   //Clicks on the Stored sign in link
 		
@@ -49,14 +48,7 @@ public class SignInTestCases {
 	@Test
 	public void signinToTheApplication() {
 		
-		System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+File.separator+"chromedriver");
-		WebDriver driver = new ChromeDriver();
-		Reporter.log("PASS -- Launched Chrome browser successfully", true);
-
-				
-		driver.get(applicationUrl);   //Opens the application URL specified
-		Reporter.log("PASS -- Application URL: "+driver.getCurrentUrl(), true);  //To get current url
-		Reporter.log("PASS -- Window Title :"+driver.getTitle(), true); //To get the window title
+		utilities.launchBrowser("Chrome");
 		
 		WebElement signInLink = driver.findElement(By.xpath("//a[@class='login']")); //Stores sign in link
 		signInLink.click();   //Clicks on the Stored sign in link
