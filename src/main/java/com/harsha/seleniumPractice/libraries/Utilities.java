@@ -7,6 +7,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Reporter;
 
+import com.harsha.seleniumPractice.results.ExtentResults;
+
 /**
  * This class file contains the code related to the browser, application launch
  * @author Sri harsha
@@ -15,6 +17,7 @@ import org.testng.Reporter;
 public class Utilities {
 
 	WebDriver driver;
+	ExtentResults results = new ExtentResults();
 	public WebDriver launchBrowser(String browser) {
 		
 		if(browser.equalsIgnoreCase("Firefox")) {
@@ -29,7 +32,7 @@ public class Utilities {
 			driver.get(Configurations.applicationUrl);   //Opens the application URL specified
 			Reporter.log("PASS -- Application URL: "+driver.getCurrentUrl(), true);  //To get current url
 		}else {
-			System.out.println("FAIL -- Browser cannot be recognised");
+			Reporter.log("FAIL -- Browser cannot be recognised", true);
 		}
 		
 		return driver;
