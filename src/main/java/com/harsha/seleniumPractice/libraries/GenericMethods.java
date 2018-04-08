@@ -26,6 +26,16 @@ public class GenericMethods {
 		}
 	}
 	
+	public void clickById(String id, String message) throws Exception {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
+			driver.findElement(By.id(id)).click();
+		}
+		catch(Exception e) {
+			throw new Exception(message);
+		}
+	}
+	
 	public String getTextByXpath(String xpath, String message) throws Exception {
 		try {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -42,6 +52,32 @@ public class GenericMethods {
 		try {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 			driver.findElement(By.xpath(xpath)).isDisplayed();
+		}
+		catch(Exception e) {
+			throw new Exception(message);
+		}
+		
+	}
+	
+	
+	public void enterTextByXpath(String xpath, String value, String message) throws Exception {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+			driver.findElement(By.xpath(xpath)).clear();
+			driver.findElement(By.xpath(xpath)).sendKeys(value);
+		}
+		catch(Exception e) {
+			throw new Exception(message);
+		}
+		
+	}
+	
+	
+	public void enterTextById(String id, String value, String message) throws Exception {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
+			driver.findElement(By.id(id)).clear();
+			driver.findElement(By.id(id)).sendKeys(value);
 		}
 		catch(Exception e) {
 			throw new Exception(message);

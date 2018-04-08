@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
 import com.harsha.seleniumPractice.libraries.GenericMethods;
+import com.harsha.seleniumPractice.results.ExtentResults;
 
 
 /**
@@ -16,6 +17,7 @@ public class SignInPage {
 	WebDriver driver;
 	WebDriverWait wait;
 	GenericMethods genericMethods;
+	ExtentResults results = new ExtentResults();
 	
 	public SignInPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -26,7 +28,7 @@ public class SignInPage {
 	public String getAuthenticationText() throws Exception {
 		String text = genericMethods.getTextByXpath("//h1[@class='page-heading']", 
 				"FAIL -- Authentication text did not display");
-		Reporter.log("PASS -- Authentication message is displayed successfully", true);
+		results.log("PASS -- Authentication message is displayed successfully", true);
 		return text;
 	}
 	
@@ -34,6 +36,30 @@ public class SignInPage {
 	public void isLoginModuleDisplayed() throws Exception {
 		genericMethods.isWebElementDisplayed("//form[@id='login_form']", 
 				"FAIL -- Login module did not display");
-		Reporter.log("PASS -- Login module displayed successfully", true);
+		results.log("PASS -- Login module displayed successfully", true);
+	}
+	
+	public void enterUserName(String userName) throws Exception {
+		genericMethods.enterTextByXpath("//input[@id='email']", userName, 
+										"FAIL -- Did not enter username into the text field");
+		results.log("PASS -- Entered Username '"+userName+"' successfully", true);
+	}
+	
+	public void enterPassword(String password) throws Exception {
+		genericMethods.enterTextById("passwd", password, 
+										"FAIL -- Did not enter password into the text field");
+		results.log("PASS -- Entered Password '"+password+"' successfully", true);
+	}
+	
+	public void clickSignInButton() throws Exception {
+		genericMethods.clickById("SubmitLogin", "FAIL -- Submit button is not clicked");
+		results.log("PASS -- Submit button clicked successfully", true);
+	}
+	
+	public void login(String userName, String password) throws Exception {
+		isLoginModuleDisplayed();
+		enterUserName(userName);
+		enterPassword(password);
+		clickSignInButton();
 	}
 }

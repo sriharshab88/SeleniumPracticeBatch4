@@ -18,6 +18,8 @@ import com.harsha.seleniumPractice.libraries.GenericMethods;
 import com.harsha.seleniumPractice.libraries.Utilities;
 import com.harsha.seleniumPractice.pageObjects.HomePage;
 import com.harsha.seleniumPractice.pageObjects.SignInPage;
+import com.harsha.seleniumPractice.results.ExtentResults;
+import com.harsha.seleniumPractice.testData.LoginCredentialsTestData;
 
 /**
  * This class file contains all the test cases related to sign module
@@ -32,6 +34,7 @@ public class SignInTestCases {
 	Utilities utilities = new Utilities();
 	HomePage homePage;
 	SignInPage signIn;
+	ExtentResults results = new ExtentResults();
 	
 	@BeforeTest
 	public void startBrowser() {
@@ -45,55 +48,52 @@ public class SignInTestCases {
 	@Test
 	public void seleniumWebDriverCommands() throws Exception {
 		
+		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
+								this.getClass().getSimpleName());
+		
 		String expectedText = "AUTHENTICATION";	
 		homePage.clickSignInLink();
 		
 		String signInText = signIn.getAuthenticationText();
-		Assert.assertEquals(signInText, expectedText, "FAIL -- Log in page did not display successfully");
-		Reporter.log("PASS -- Log in page displayed successfully", true);
-		
-		
+		results.assertEquals(signInText, expectedText, "Log in page did not display successfully");
+		results.log("PASS -- Log in page displayed successfully", true);
+
 	}
+	
 	
 	@Test
 	public void signinToTheApplication() throws Exception {
 		
+		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
+				this.getClass().getSimpleName());
+		
 		String expectedText = "AUTHENTICATION";	
 		homePage.clickSignInLink();
 		
 		String signInText = signIn.getAuthenticationText();
-		Assert.assertEquals(signInText, expectedText, "FAIL -- Log in page did not display successfully");
-		Reporter.log("PASS -- Log in page displayed successfully", true);
+		results.assertEquals(signInText, expectedText, "Log in page did not display successfully");
+		results.log("PASS -- Log in page displayed successfully", true);
 		
-		signIn.isLoginModuleDisplayed();
-		
-		driver.findElement(By.xpath("//input[@id='email']"))
-							 .sendKeys("testautomation88@test.com");   //Enter the email into the email text box
-		
-		WebElement password = driver.findElement(By.id("passwd"));
-		password.sendKeys("123456");   //Enter the password into the password text box
-		
-		WebElement signInButton = driver.findElement(By.id("SubmitLogin"));  //Fetch the webelement
-		signInButton.click();  //Click on the Sign in button
-		
-		driver.get(applicationUrl);  //redirecting back to home page because of the faulty page
-		
-		WebElement userName = driver.findElement(By.xpath("//a[@class='account']/span"));  //fetching the username webelement
-		String actualUserName = userName.getText();  //Fetching the text of that web element
+		signIn.login("testautomation88@test.com", "123456");
+			
+		String actualUserName = homePage.getUserNameText();  //Fetching the text of that web element
 		String expectedUserName = "Tester Selenium";
+		results.assertEquals(actualUserName, expectedUserName, 
+				"Username did not match");   //Compare the username
+		results.log("PASS -- Username Matched", true);
 		
-		Assert.assertEquals(actualUserName, expectedUserName, 
-				"FAIL -- Username did not match");   //Compare the username
-		Reporter.log("PASS -- Username Matched", true);
+		homePage.clickSignOut();
 		
-		driver.findElement(By.xpath("//a[@class='logout']")).click();   //Logout from the application
-		Reporter.log("PASS -- User is logged out successfully", true);
+	}
+	
+	@Test(dataProviderClass=LoginCredentialsTestData.class, dataProvider="credentialsValidation")
+	public void MultipleAccountsValidation(String emailId, String password) throws Exception {
+		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
+				this.getClass().getSimpleName());
 		
-				
-		//driver.close(); //Closes the active selenium instance of the browser
-		driver.quit();    //Closes the complete process of that driver/browser instance
-
-		
+		homePage.clickSignInLink();
+		signIn.login(emailId, password);
+		homePage.clickSignOut();
 	}
 	
 	@AfterTest
