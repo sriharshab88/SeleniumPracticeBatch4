@@ -7,62 +7,65 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.harsha.seleniumPractice.libraries.GenericMethods;
 import com.harsha.seleniumPractice.libraries.Utilities;
+import com.harsha.seleniumPractice.pageObjects.HomePage;
+import com.harsha.seleniumPractice.pageObjects.SignInPage;
 
+/**
+ * This class file contains all the test cases related to sign module
+ * @author Sri harsha
+ *
+ */
 public class SignInTestCases {
 	
 	WebDriver driver;
+	WebDriverWait wait;
 	String applicationUrl = "http://automationpractice.com/index.php";
 	Utilities utilities = new Utilities();
+	HomePage homePage;
+	SignInPage signIn;
+	
+	@BeforeTest
+	public void startBrowser() {
+		driver = utilities.launchBrowser("Firefox"); //This will launch the browser and application
+		wait = new WebDriverWait(driver, 30);
+		homePage = new HomePage(driver, wait);
+		signIn = new SignInPage(driver, wait);
+	}
 	
 	
 	@Test
-	public void seleniumWebDriverCommands() {
+	public void seleniumWebDriverCommands() throws Exception {
 		
-		driver = utilities.launchBrowser("Firefox"); //This will launch the browser and application
-		WebElement signInLink = driver.findElement(By.xpath("//a[@class='login']")); //Stores sign in link
-		signInLink.click();   //Clicks on the Stored sign in link
+		String expectedText = "AUTHENTICATION";	
+		homePage.clickSignInLink();
 		
-		WebElement loginPageText = driver.findElement(By.xpath("//h1[@class='page-heading']"));
-		String signInText = loginPageText.getText();
-		
-		//String signInText1 = driver.findElement(By.xpath("//h1[@class='page-heading']")).getText();
-		
-		if(signInText.equals("AUTHENTICATION")) {
-			System.out.println("PASS -- Log in page displayed successfully");
-		}else {
-			System.out.println("FAIL -- Log in page did not display successfully");
-		}
-		
-		//driver.close();
-		driver.quit();
+		String signInText = signIn.getAuthenticationText();
+		Assert.assertEquals(signInText, expectedText, "FAIL -- Log in page did not display successfully");
+		Reporter.log("PASS -- Log in page displayed successfully", true);
 		
 		
 	}
 	
 	@Test
-	public void signinToTheApplication() {
+	public void signinToTheApplication() throws Exception {
 		
-		utilities.launchBrowser("Chrome");
+		String expectedText = "AUTHENTICATION";	
+		homePage.clickSignInLink();
 		
-		WebElement signInLink = driver.findElement(By.xpath("//a[@class='login']")); //Stores sign in link
-		signInLink.click();   //Clicks on the Stored sign in link
-		
-		WebElement loginPageText = driver.findElement(By.xpath("//h1[@class='page-heading']"));
-		String signInText = loginPageText.getText();  //Fetches the text
-		String expectedSignInText = "AUTHENTICATION";
-		
-		Assert.assertEquals(signInText, expectedSignInText, 
-				"FAIL -- Log in page did not display successfully"); //Compares the values using TestNG Assertion
+		String signInText = signIn.getAuthenticationText();
+		Assert.assertEquals(signInText, expectedText, "FAIL -- Log in page did not display successfully");
 		Reporter.log("PASS -- Log in page displayed successfully", true);
 		
-		WebElement loginModule = driver.findElement(By.xpath("//form[@id='login_form']"));
-		loginModule.isDisplayed();  //Verifying whether the webelement is displayed or not
+		signIn.isLoginModuleDisplayed();
 		
 		driver.findElement(By.xpath("//input[@id='email']"))
 							 .sendKeys("testautomation88@test.com");   //Enter the email into the email text box
@@ -91,6 +94,11 @@ public class SignInTestCases {
 		driver.quit();    //Closes the complete process of that driver/browser instance
 
 		
+	}
+	
+	@AfterTest
+	public void endBrowser() {
+		driver.quit();
 	}
 	
 	

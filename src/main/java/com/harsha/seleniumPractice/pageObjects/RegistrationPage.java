@@ -1,5 +1,5 @@
 package com.harsha.seleniumPractice.pageObjects;
 
-public class SignIn {
+public class RegistrationPage {
 
 }

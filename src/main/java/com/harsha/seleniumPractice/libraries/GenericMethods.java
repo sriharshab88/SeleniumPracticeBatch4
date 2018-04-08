@@ -7,20 +7,46 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
 public class GenericMethods {
+
+	WebDriver driver;
+	WebDriverWait wait;
+		
+		public GenericMethods(WebDriver driver, WebDriverWait wait) {
+		this.driver = driver;
+		this.wait = wait;
+	}
 	
-		WebDriver driver;
-		WebDriverWait wait;
-		
-		
-	public void clickByXpath(String xpath, String message) {
+	public void clickByXpath(String xpath, String message) throws Exception {
 		try {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 			driver.findElement(By.xpath(xpath)).click();
-			Reporter.log("PASS -- Element is clicked successfully", true);
 		}
 		catch(Exception e) {
-			Reporter.log("FAIL --  Element is not clicked", true);
+			throw new Exception(message);
 		}
+	}
+	
+	public String getTextByXpath(String xpath, String message) throws Exception {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+			String actualText = driver.findElement(By.xpath(xpath)).getText();
+			return actualText;
+		}
+		catch(Exception e) {
+			throw new Exception(message);
+		}
+		
+	}
+	
+	public void isWebElementDisplayed(String xpath, String message) throws Exception {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+			driver.findElement(By.xpath(xpath)).isDisplayed();
+		}
+		catch(Exception e) {
+			throw new Exception(message);
+		}
+		
 	}
 
 }
