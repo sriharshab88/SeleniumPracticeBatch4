@@ -1,0 +1,10 @@
+#SignIn Test cases Test Data
+expectedText = AUTHENTICATION
+loginPageError = Log in page did not display successfully
+loginPageSuccess = PASS -- Log in page displayed successfully
+#******************************************************************
+email = testautomation88@test.com
+password = 123456
+expectedUserName = Tester Selenium
+UsernameError = Username did not match
+UserNameSuccess = PASS -- Username Matched

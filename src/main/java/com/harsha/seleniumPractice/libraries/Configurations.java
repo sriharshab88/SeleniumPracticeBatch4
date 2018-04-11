@@ -14,4 +14,6 @@ public class Configurations {
 											+File.separator+"chromedriver";
 	
 	public static String resultsPath = System.getProperty("user.dir")+File.separator+"ExtentReports.html";
+	public static String testDataPath = System.getProperty("user.dir") + File.separator+ "src/main/java"+
+			File.separator +"com/harsha/seleniumPractice/testData"+ File.separator+"testData"; 
 }

@@ -20,6 +20,7 @@ import com.harsha.seleniumPractice.pageObjects.HomePage;
 import com.harsha.seleniumPractice.pageObjects.SignInPage;
 import com.harsha.seleniumPractice.results.ExtentResults;
 import com.harsha.seleniumPractice.testData.LoginCredentialsTestData;
+import com.harsha.seleniumPractice.testData.TestDataReader;
 
 /**
  * This class file contains all the test cases related to sign module
@@ -30,7 +31,6 @@ public class SignInTestCases {
 	
 	WebDriver driver;
 	WebDriverWait wait;
-	String applicationUrl = "http://automationpractice.com/index.php";
 	Utilities utilities = new Utilities();
 	HomePage homePage;
 	SignInPage signIn;
@@ -50,13 +50,12 @@ public class SignInTestCases {
 		
 		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
 								this.getClass().getSimpleName());
-		
-		String expectedText = "AUTHENTICATION";	
+	
 		homePage.clickSignInLink();
 		
 		String signInText = signIn.getAuthenticationText();
-		results.assertEquals(signInText, expectedText, "Log in page did not display successfully");
-		results.log("PASS -- Log in page displayed successfully", true);
+		results.assertEquals(signInText, TestDataReader.expectedText, TestDataReader.loginPageErrorMsg);
+		results.log(TestDataReader.loginPageSuccessMsg, true);
 
 	}
 	
@@ -66,21 +65,19 @@ public class SignInTestCases {
 		
 		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
 				this.getClass().getSimpleName());
-		
-		String expectedText = "AUTHENTICATION";	
+	
 		homePage.clickSignInLink();
 		
 		String signInText = signIn.getAuthenticationText();
-		results.assertEquals(signInText, expectedText, "Log in page did not display successfully");
-		results.log("PASS -- Log in page displayed successfully", true);
+		results.assertEquals(signInText, TestDataReader.expectedText, TestDataReader.loginPageErrorMsg);
+		results.log(TestDataReader.loginPageSuccessMsg, true);
 		
-		signIn.login("testautomation88@test.com", "123456");
+		signIn.login(TestDataReader.email, TestDataReader.password);
 			
 		String actualUserName = homePage.getUserNameText();  //Fetching the text of that web element
-		String expectedUserName = "Tester Selenium";
-		results.assertEquals(actualUserName, expectedUserName, 
-				"Username did not match");   //Compare the username
-		results.log("PASS -- Username Matched", true);
+		results.assertEquals(actualUserName, TestDataReader.expectedUserName, 
+				TestDataReader.expectedUserNameErrorMsg);   //Compare the username
+		results.log(TestDataReader.expectedUserNameSuccessMsg, true);
 		
 		homePage.clickSignOut();
 		
@@ -88,7 +85,7 @@ public class SignInTestCases {
 	
 	@Test(dataProviderClass=LoginCredentialsTestData.class, dataProvider="credentialsValidation")
 	public void MultipleAccountsValidation(String emailId, String password) throws Exception {
-		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName(), 
+		results.createtestcase(Thread.currentThread().getStackTrace()[1].getMethodName()+"--"+emailId, 
 				this.getClass().getSimpleName());
 		
 		homePage.clickSignInLink();
